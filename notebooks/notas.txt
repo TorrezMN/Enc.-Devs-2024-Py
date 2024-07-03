@@ -1,0 +1,20 @@
+code_for_job
+IT_exp
+prof_prog_exp
+first_code
+formal_edu
+formal_edu_importance
+gender
+age
+AI_replace_dev
+layoffs_23_24
+working_now
+unemployed_duration
+same_role
+current_vs_prev_salary
+
+
+Working Flow
+
+1- Renamed column names.
+2- Renamed column content. Long names and stuff where shortened AND translated to english.
