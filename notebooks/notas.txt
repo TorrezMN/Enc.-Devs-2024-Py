@@ -1,20 +1,68 @@
-code_for_job
-IT_exp
-prof_prog_exp
-first_code
-formal_edu
-formal_edu_importance
-gender
-age
-AI_replace_dev
-layoffs_23_24
-working_now
-unemployed_duration
-same_role
-current_vs_prev_salary
+
+COLUMNAS MODIFICADAS
+- code_for_job
+- IT_exp
+- prof_prog_exp
+- first_code
+- formal_edu
+- formal_edu_importance
+- gender
+- age
+- AI_replace_dev
+- layoffs_23_24
+- working_now
+- unemployed_duration
+- same_role
+- current_vs_prev_salary
 
 
 Working Flow
 
 1- Renamed column names.
 2- Renamed column content. Long names and stuff where shortened AND translated to english.
+
+
+
+TOPICOS SUGERIDOS POR CHATGPT
+---
+Based on the questions in the survey, here are some interesting topics and aspects to study:
+
+# Work Modalities and Employment Types
+    Analyze the distribution of work modalities (remote, onsite, hybrid) and types of employment (local, international, freelance).
+    Study the correlation between work modalities and job satisfaction or productivity.
+
+# Roles and Programming Skills
+    Examine the prevalence of different IT roles and the usage of programming skills in those roles.
+    Identify which roles require the most programming skills and which do not.
+
+# Experience and Professional Development
+    Investigate the relationship between years of experience in IT and programming proficiency.
+    Analyze how the first exposure to coding impacts professional growth and career trajectory.
+
+# Seniority Levels
+	Compare the assigned seniority levels with self-assessed seniority levels.
+	Study discrepancies and factors contributing to these differences.
+
+# Education and Its Importance
+	Evaluate the formal education background of respondents and its perceived importance in their career.
+	Identify popular fields of study and their relevance to current job roles.
+
+# Demographics
+	Analyze the demographic distribution of respondents, including age and gender.
+	Study the impact of demographic factors on career progression and salary.
+
+# Salary Analysis
+	Investigate salary ranges across different roles, experience levels, and education backgrounds.
+	Analyze salary trends and identify factors influencing salary variations.
+
+# Technologies and Tools Usage
+	Study the usage patterns of programming languages, frameworks, databases, and platforms.
+	Identify favorite and least favorite technologies and tools among respondents.
+
+# Artificial Intelligence in Development
+	Explore the adoption of AI tools in the development process.
+	Assess opinions on whether AI will replace developers in the future.
+
+# Impact of Lay-offs
+	Analyze the impact of lay-offs on employment status and job roles.
+	Study the time taken to find new employment and compare new job roles and salaries with previous ones.
