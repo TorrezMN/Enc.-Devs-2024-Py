@@ -1,0 +1,51 @@
+For analyzing the developers' survey, you can categorize the questions into different themes to help in drawing meaningful insights. Here are some suggested categories:
+
+### 1. **Demographics**
+   - Marca temporal
+   - Género
+   - Edad actual
+
+### 2. **Employment and Work Conditions**
+   - Modalidad de trabajo
+   - Modalidad de empleo
+   - Puesto / rol
+   - ¿Utilizás habilidades de programación en alguno de los siguientes roles/puestos?
+   - ¿Codificás por trabajo?
+   - ¿Qué nivel te asignaron en tu trabajo?
+   - ¿Cuál considerás que es tu nivel en tu puesto?
+
+### 3. **Experience and Education**
+   - Experiencia en TI
+   - Experiencia programando profesionalmente
+   - Primera línea de código en una máquina
+   - Educación Formal
+   - Carreras o especialidades
+   - Importancia educación formal
+
+### 4. **Technology and Tools Usage**
+   - Programación, scripting y lenguajes de marcado que usás en tu profesión
+   - Librerías o web frameworks
+   - Otros frameworks, librerías y herramientas
+   - Base de datos
+   - Plataformas
+   - Lenguaje favorito
+   - Lenguaje más odiado o menos favorito
+   - Framework favorito
+   - Framework más odiado o menos favorito
+   - Herramientas
+
+### 5. **Artificial Intelligence**
+   - ¿Usás regularmente* alguna de estas herramientas de I.A. para ayudarte en tu proceso de desarrollo?
+   - ¿Creés que la inteligencia artificial reemplazará al desarrollador?
+
+### 6. **Compensation**
+   - Salario mensual
+
+### 7. **Impact of Lay-offs**
+   - ¿Fuiste afectado por recortes de personal (lay-offs) en el 2023 o en lo que va del 2024?
+   - ¿Estás trabajando actualmente luego del recorte?
+   - Si estás trabajando ahora, ¿cuánto tiempo después del recorte volviste a trabajar?
+   - Si estás trabajando ahora, ¿lo hacés en el mismo rol que trabajabas antes del recorte?
+   - Si estás trabajando ahora, tu remuneración en tu puesto actual versus la que percibías antes del recorte es:
+
+These categories will help in organizing the analysis and making it easier to derive insights from the survey data.

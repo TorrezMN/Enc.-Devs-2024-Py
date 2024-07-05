@@ -430,3 +430,39 @@ def chart_pie_list(grouped_df, column, title, explode=None, autopct="%1.1f%%"):
         plt.title(f"{title} \n {group_name} \n Total: {group_data.shape[0]}")
         plt.ylabel("")
         plt.show()
+
+
+def barh_chart_count(df, column_name, title, xlabel):
+    """
+    Plots a horizontal bar chart for the value counts of a specified column.
+
+    Parameters:
+    ----------
+    df : pandas.DataFrame
+        The input DataFrame.
+    column_name : str
+        The name of the column to plot value counts for.
+    title : str
+        The title of the chart.
+    xlabel : str
+        The label for the x-axis.
+
+    Returns:
+    -------
+    None
+    """
+    counts = df[column_name].value_counts()
+
+    plt.figure()
+    ax = counts.plot(kind="barh")
+    plt.title(title, fontsize=14, fontweight="bold")
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(column_name)
+    ax.xaxis.set_major_locator(
+        MaxNLocator(integer=True)
+    )  # Ensure numeric values are integers
+
+    for index, val in enumerate(counts):
+        ax.text(val, index, str(val), va="center")
+
+    plt.show()

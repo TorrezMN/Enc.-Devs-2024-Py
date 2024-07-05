@@ -1,0 +1,34 @@
+0 - Marca temporal
+1 - Modalidad de trabajo
+2 - Modalidad de empleo 
+3 - Puesto / rol
+4 - ¿Utilizás habilidades de programación en alguno de los siguientes roles/puestos?
+5 - ¿Codificás por trabajo?
+6 - Experiencia en TI
+7 - Experiencia programando profesionalmente 
+8 - Primera línea de código en una máquina
+9 - ¿Qué nivel te asignaron en tu trabajo?
+10 - ¿Cuál considerás que es tu nivel en tu puesto?
+11 - Educación Formal
+12 - Carreras o especialidades
+13 - Importancia educación formal
+14 - Género
+15 - Edad actual 
+16 - Salario mensual
+17 - Programación, scripting y lenguajes de marcado que usás en tu profesión
+18 - Librerías o web frameworks
+19 - Otros frameworks, librerías y herramientas
+20 - Base de datos
+21 - Plataformas
+22 - Lenguaje favorito
+23 - Lenguaje más odiado o menos favorito
+24 - Framework favorito
+25 - Framework más odiado o menos favorito
+26 - Herramientas
+27 - ¿Usás regularmente* alguna de estas herramientas de I.A. para ayudarte en tu proceso de desarrollo?
+28 -  ¿Creés que la inteligencia artificial reemplazará al desarrollador?
+29 - ¿Fuiste afectado por recortes de personal (lay-offs) en el 2023 o en lo que va del 2024?
+30 - ¿Estás trabajando actualmente luego del recorte?
+31 - Si estás trabajando ahora, ¿cuánto tiempo después del recorte volviste a trabajar?
+32 - Si estás trabajando ahora, ¿lo hacés en el mismo rol que trabajabas antes del recorte?
+33 - Si estás trabajando ahora, tu remuneración en tu puesto actual versus la que percibías antes del recorte es:
