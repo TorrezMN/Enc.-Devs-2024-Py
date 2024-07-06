@@ -130,13 +130,17 @@ def barh_chart_unique_values(df, group_column, value_column, title, ylabel):
     -------
     None
     """
+    # Ensure there are no NaN values in the group_column
+    df = df.dropna(subset=[group_column])
+
     unique_values = get_column_uniques(df, group_column)
 
     for value in unique_values:
-        counts = df[df[group_column].str.contains(value)][value_column].value_counts()
+        counts = df[df[group_column].str.contains(value, na=False)][
+            value_column
+        ].value_counts()
 
         plt.figure()
-        # ax = counts.plot(kind="barh", title=f"{title} \n{value}")
         ax = counts.plot(kind="barh")
         plt.title(f"{title} \n {value}", fontsize=14, fontweight="bold")
         ax.set_xlabel("Count")
