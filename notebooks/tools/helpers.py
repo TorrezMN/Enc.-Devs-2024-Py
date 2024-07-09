@@ -470,3 +470,48 @@ def barh_chart_count(df, column_name, title, xlabel):
         ax.text(val, index, str(val), va="center")
 
     plt.show()
+
+
+def barh_chart_normal_count(
+    df, column_name, title="Work mode total count", xlabel="count", ylabel="Work Mode"
+):
+    fig = plt.figure(figsize=(9, 6))
+
+    wm_plot = (
+        df[column_name]
+        .value_counts()
+        .plot(
+            kind="barh",
+            title=title,
+            xlabel=xlabel,
+            ylabel=ylabel,
+        )
+    )
+    # wm_plot.set_xlabel("Total")
+    # wm_plot.set_ylabel("Job title.")
+
+    for k, v in enumerate(get_column_uniques_count(df, column_name)):
+        wm_plot.annotate(v, (v, k), va="center")
+
+    plt.show()
+
+
+def uniques_count_to_dataframe(series, top_n=10):
+    """
+    Converts a Series object containing unique counts into a DataFrame with specified column names,
+    excluding the first value and including 'role' as the first column.
+
+    Parameters:
+    - series (pd.Series): The Series object to convert.
+    - top_n (int): The number of top entries to include in the DataFrame.
+
+    Returns:
+    - pd.DataFrame: The resulting DataFrame with columns 'role' and 'count'.
+    """
+    # Convert the Series to a DataFrame, exclude the first value, and reset the index
+    df = series.iloc[1 : top_n + 1].reset_index()
+
+    # Rename the columns
+    df.columns = ["role", "count"]
+
+    return df
