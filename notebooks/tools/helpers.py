@@ -78,7 +78,9 @@ def get_column_uniques_count(df, column_name):
     return value_counts
 
 
-def plot_grouped_by_category_barh_charts(grouped_df, column_name, title, ylabel):
+def plot_grouped_by_category_barh_charts(
+    grouped_df, column_name, title, ylabel, fontsize=10
+):
     """
     Plots multiple horizontal bar charts based on a set of 'groups'.
 
@@ -90,6 +92,12 @@ def plot_grouped_by_category_barh_charts(grouped_df, column_name, title, ylabel)
         The grouped DataFrame by some categorical variable.
     column_name : str
         The name of the column containing categorical data to be plotted.
+    title : str
+        The title for each plot.
+    ylabel : str
+        The label for the y-axis.
+    fontsize : int, optional
+        The font size of the value labels at the end of each bar.
 
     Returns:
     -------
@@ -97,6 +105,13 @@ def plot_grouped_by_category_barh_charts(grouped_df, column_name, title, ylabel)
     """
     for group_name in grouped_df.groups.keys():
         group_df = grouped_df.get_group(group_name)
+
+        # Drop rows with NaN values in the specified column
+        group_df = group_df.dropna(subset=[column_name])
+
+        if group_df.empty:
+            continue
+
         counts = get_column_uniques_count(group_df, column_name)
 
         plt.figure()
@@ -106,7 +121,7 @@ def plot_grouped_by_category_barh_charts(grouped_df, column_name, title, ylabel)
         ax.set_ylabel(ylabel)
         plt.title(f"{title} \n {group_name}", fontsize=14, fontweight="bold")
         for index, value in enumerate(counts):
-            ax.text(value, index, str(value), va="center")
+            ax.text(value, index, str(value), va="center", fontsize=fontsize)
 
         plt.show()
 
@@ -152,9 +167,11 @@ def barh_chart_unique_values(df, group_column, value_column, title, ylabel):
         plt.show()
 
 
-def print_unique_normalized_values_by_group(df, group_column, value_column, title):
+def barh_chart_unique_values_grid(
+    df, group_column, value_column, title, ylabel, nrows, ncols
+):
     """
-    Plots horizontal bar charts for each unique value in group_column.
+    Plots a grid of horizontal bar charts for each unique value in group_column.
 
     Counts occurrences of value_column within each group.
 
@@ -166,18 +183,81 @@ def print_unique_normalized_values_by_group(df, group_column, value_column, titl
         The name of the column containing categorical values for grouping.
     value_column : str
         The name of the column for which to count occurrences within each group.
+    title : str
+        The main title for the grid of charts.
+    ylabel : str
+        The label for the y-axis of each chart.
+    nrows : int
+        The number of rows in the grid.
+    ncols : int
+        The number of columns in the grid.
+
+    Returns:
+    -------
+    None
+    """
+    # Ensure there are no NaN values in the group_column
+    df = df.dropna(subset=[group_column])
+
+    unique_values = df[group_column].unique()
+
+    fig, axes = plt.subplots(nrows, ncols, figsize=(ncols * 5, nrows * 4))
+    axes = axes.flatten()
+
+    for i, value in enumerate(unique_values):
+        if i < len(axes):
+            counts = df[df[group_column] == value][value_column].value_counts()
+            ax = axes[i]
+            counts.plot(kind="barh", ax=ax)
+            ax.set_title(f"{title} \n {value}", fontsize=14, fontweight="bold")
+            ax.set_xlabel("Count")
+            ax.set_ylabel(ylabel)
+
+            for index, val in enumerate(counts):
+                ax.text(val, index, str(val), va="center")
+        else:
+            break  # No more subplots available, break the loop
+
+    # Hide any remaining unused subplots
+    for j in range(i + 1, len(axes)):
+        fig.delaxes(axes[j])
+
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+    plt.suptitle(title, fontsize=16, fontweight="bold")
+    plt.show()
+
+
+def print_unique_normalized_values_by_group(df, group_column, value_column, title):
+    """
+    Prints normalized value counts for each unique value in group_column.
+
+    Counts occurrences of value_column within each group and prints them as percentages.
+
+    Parameters:
+    ----------
+    df : pandas.DataFrame
+        The input DataFrame.
+    group_column : str
+        The name of the column containing categorical values for grouping.
+    value_column : str
+        The name of the column for which to count occurrences within each group.
+    title : str
+        The title to print before each group of counts.
 
     Returns:
     -------
     None
     """
 
-    unique_values = get_column_uniques(df, group_column)
+    # Remove rows with NaN values in group_column or value_column
+    df = df.dropna(subset=[group_column, value_column])
+
+    unique_values = df[group_column].unique()
 
     for value in unique_values:
-        counts = df[df[group_column].str.contains(value)][value_column].value_counts(
-            normalize=True
-        )
+        counts = df[df[group_column].str.contains(value, na=False)][
+            value_column
+        ].value_counts(normalize=True)
         percentages = (counts * 100).astype(int).astype(str) + "%"
 
         print(f"{title} - {value}")
@@ -337,7 +417,9 @@ def make_horizontal_grouped_chart(df, g1, g2, col, labels, config):
     plt.show()
 
 
-def grouped_grid_barh_chart(df_grouped, column, title, nrows, ncols, color="blue"):
+def grouped_grid_barh_chart(
+    df_grouped, column, title, nrows, ncols, color="blue", fontsize=10
+):
     """
     Creates a grid of horizontal bar charts for each group in a grouped DataFrame.
 
@@ -348,19 +430,33 @@ def grouped_grid_barh_chart(df_grouped, column, title, nrows, ncols, color="blue
     nrows (int): Number of rows in the grid
     ncols (int): Number of columns in the grid
     color (str): Color of the bars in the charts
+    fontsize (int): Font size of the value labels at the end of each bar
     """
-    plt.figure(figsize=(ncols * 5, nrows * 3), dpi=80)
+    plt.figure(figsize=(ncols * 5, nrows * 4), dpi=80)
 
     for k, (group_name, group_data) in enumerate(df_grouped):
-        plt.subplot(nrows, ncols, k + 1)
-        group_data[column].value_counts().plot(
+        ax = plt.subplot(nrows, ncols, k + 1)
+        value_counts = group_data[column].value_counts()
+
+        value_counts.plot(
             kind="barh",
             title=f"{title} \n {group_name} | {group_data.shape[0]}",
             color=color,
+            ax=ax,
         )
 
+        # Add value labels at the end of each bar
+        for i, (value, count) in enumerate(value_counts.items()):
+            ax.text(count, i, str(count), va="center", fontsize=fontsize)
+
+        # Adjust spacing between bars
+        ax.set_yticks(range(len(value_counts)))
+        ax.set_yticklabels(value_counts.index, fontsize=fontsize)
+        ax.invert_yaxis()
+        ax.set_ylim([-0.5, len(value_counts) - 0.5])
+
     plt.subplots_adjust(
-        left=0.1, bottom=0.1, right=0.9, top=0.9, wspace=0.4, hspace=0.9
+        left=0.1, bottom=0.1, right=0.9, top=0.9, wspace=0.4, hspace=0.8
     )
     plt.show()
 
@@ -473,25 +569,32 @@ def barh_chart_count(df, column_name, title, xlabel):
 
 
 def barh_chart_normal_count(
-    df, column_name, title="Work mode total count", xlabel="count", ylabel="Work Mode"
+    df,
+    column_name,
+    title="Work mode total count",
+    xlabel="count",
+    ylabel="Work Mode",
+    top_n=10,
 ):
-    fig = plt.figure(figsize=(9, 6))
+    # Get the unique counts of the column as a Series
+    series = get_column_uniques_count(df, column_name)
 
-    wm_plot = (
-        df[column_name]
-        .value_counts()
-        .plot(
-            kind="barh",
-            title=title,
-            xlabel=xlabel,
-            ylabel=ylabel,
-        )
+    # Convert the Series to a DataFrame using the provided function
+    unique_count_df = uniques_count_to_dataframe(series, top_n)
+
+    fig, ax = plt.subplots(figsize=(9, 6))
+
+    # Plot the barh chart using the DataFrame
+    unique_count_df.plot(
+        kind="barh", x="role", y="count", ax=ax, legend=False, title=title
     )
-    # wm_plot.set_xlabel("Total")
-    # wm_plot.set_ylabel("Job title.")
 
-    for k, v in enumerate(get_column_uniques_count(df, column_name)):
-        wm_plot.annotate(v, (v, k), va="center")
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+
+    # Annotate the bars with their counts
+    for index, row in unique_count_df.iterrows():
+        ax.annotate(row["count"], (row["count"], index), va="center")
 
     plt.show()
 
@@ -499,7 +602,7 @@ def barh_chart_normal_count(
 def uniques_count_to_dataframe(series, top_n=10):
     """
     Converts a Series object containing unique counts into a DataFrame with specified column names,
-    excluding the first value and including 'role' as the first column.
+    including the first value and including 'role' as the first column.
 
     Parameters:
     - series (pd.Series): The Series object to convert.
@@ -508,10 +611,54 @@ def uniques_count_to_dataframe(series, top_n=10):
     Returns:
     - pd.DataFrame: The resulting DataFrame with columns 'role' and 'count'.
     """
-    # Convert the Series to a DataFrame, exclude the first value, and reset the index
-    df = series.iloc[1 : top_n + 1].reset_index()
+    # Convert the Series to a DataFrame, include the first value, and reset the index
+    df = series.iloc[:top_n].reset_index()
 
     # Rename the columns
     df.columns = ["role", "count"]
 
     return df
+
+
+def plot_uniques_count(
+    df, title="Count of Unique Values", xlabel="Count", ylabel="Role"
+):
+    """
+    Plots a horizontal bar chart for the unique counts DataFrame.
+
+    Parameters:
+    ----------
+    df : pandas.DataFrame
+        The input DataFrame containing 'role' and 'count' columns.
+    title : str
+        The title of the chart.
+    xlabel : str
+        The label for the x-axis.
+    ylabel : str
+        The label for the y-axis.
+
+    Returns:
+    -------
+    None
+    """
+    fig, ax = plt.subplots(figsize=(9, 6))
+
+    # Plot the barh chart using the DataFrame
+    df.plot(
+        kind="barh",
+        x="role",
+        y="count",
+        ax=ax,
+        legend=False,
+        title=title,
+        color="skyblue",
+    )
+
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+
+    # Annotate the bars with their counts
+    for index, row in df.iterrows():
+        ax.annotate(row["count"], (row["count"], index), va="center")
+
+    plt.show()
