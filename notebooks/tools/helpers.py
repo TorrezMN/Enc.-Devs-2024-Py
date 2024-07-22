@@ -4,6 +4,14 @@ import matplotlib.pyplot as plt
 import random
 import pandas as pd
 from matplotlib.ticker import MaxNLocator
+import json
+import string
+
+
+def get_random_id():
+    characters = string.ascii_letters + string.digits
+    random_id = "".join(random.choices(characters, k=5))
+    return random_id
 
 
 def random_hex():
@@ -586,7 +594,7 @@ def barh_chart_normal_count(
 
     # Plot the barh chart using the DataFrame
     unique_count_df.plot(
-        kind="barh", x="role", y="count", ax=ax, legend=False, title=title
+        kind="barh", x="category", y="count", ax=ax, legend=False, title=title
     )
 
     ax.set_xlabel(xlabel)
@@ -602,26 +610,26 @@ def barh_chart_normal_count(
 def uniques_count_to_dataframe(series, top_n=10):
     """
     Converts a Series object containing unique counts into a DataFrame with specified column names,
-    including the first value and including 'role' as the first column.
+    including the first value and including 'category' as the first column.
 
     Parameters:
     - series (pd.Series): The Series object to convert.
     - top_n (int): The number of top entries to include in the DataFrame.
 
     Returns:
-    - pd.DataFrame: The resulting DataFrame with columns 'role' and 'count'.
+    - pd.DataFrame: The resulting DataFrame with columns 'category' and 'count'.
     """
     # Convert the Series to a DataFrame, include the first value, and reset the index
     df = series.iloc[:top_n].reset_index()
 
     # Rename the columns
-    df.columns = ["role", "count"]
+    df.columns = ["category", "count"]
 
     return df
 
 
 def plot_uniques_count(
-    df, title="Count of Unique Values", xlabel="Count", ylabel="Role"
+    df, title="Count of Unique Values", xlabel="Count", ylabel="category"
 ):
     """
     Plots a horizontal bar chart for the unique counts DataFrame.
@@ -629,7 +637,7 @@ def plot_uniques_count(
     Parameters:
     ----------
     df : pandas.DataFrame
-        The input DataFrame containing 'role' and 'count' columns.
+        The input DataFrame containing 'category' and 'count' columns.
     title : str
         The title of the chart.
     xlabel : str
@@ -646,7 +654,7 @@ def plot_uniques_count(
     # Plot the barh chart using the DataFrame
     df.plot(
         kind="barh",
-        x="role",
+        x="category",
         y="count",
         ax=ax,
         legend=False,
@@ -662,3 +670,138 @@ def plot_uniques_count(
         ax.annotate(row["count"], (row["count"], index), va="center")
 
     plt.show()
+
+
+def md_table(label, df, caption):
+    """
+    Generates a markdown table with HTML styling.
+
+    Parameters:
+    - label (str): The label for the table (used in the anchor tag).
+    - df (pd.DataFrame): The dataframe to be converted to a markdown table.
+    - caption (str): The caption for the table.
+    """
+    # Convert the dataframe to a markdown table
+    markdown_table = df.to_markdown(index=False)
+
+    # Print the output with HTML styling
+    print(
+        f"""
+        <center>
+        <a id="{label}_{get_random_id()}"></a>
+        
+        {markdown_table}
+        
+        <p style="text-align: center;"><em>{caption}</em></p>
+        </center>
+        <br/>
+        <br/>
+    """
+    )
+
+
+def print_code(language, code):
+    """
+    Returns a Markdown-formatted string with syntax highlighting for GitHub.
+
+    Parameters:
+    - language (str): The programming language for syntax highlighting.
+    - code (str): The piece of code to be highlighted.
+
+    Returns:
+    - str: A Markdown-formatted string with syntax highlighting.
+    """
+    # Format the code in Markdown with syntax highlighting
+    markdown_code = f"```{language}\n{code}\n```"
+
+    return markdown_code
+
+
+def save_json(file, object_name, json_object):
+    """
+    Appends a JSON object to a list under the specified object name in the JSON file.
+
+    Parameters:
+    - file (str): The file path of the JSON file.
+    - object_name (str): The name of the JSON object.
+    - json_object (dict): The JSON object to be appended.
+    """
+    # Read existing data from the file if it exists
+    try:
+        with open(file, "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = {}
+
+    # Check if the object name already exists and is a list
+    if object_name in data:
+        if isinstance(data[object_name], list):
+            data[object_name].append(json_object)
+        else:
+            raise ValueError(f"Existing data under '{object_name}' is not a list.")
+    else:
+        data[object_name] = [json_object]
+
+    # Write the updated data back to the file
+    with open(file, "w") as f:
+        json.dump(data, f, indent=4)
+
+
+def md_group_table(label, df, group_column, value_column, title):
+    """
+    Prints normalized value counts for each unique value in group_column as a Markdown table,
+    including HTML styling and a title.
+
+    Parameters:
+    ----------
+    label : str
+        The ID to use for the anchor tag.
+    df : pandas.DataFrame
+        The input DataFrame.
+    group_column : str
+        The name of the column containing categorical values for grouping.
+    value_column : str
+        The name of the column for which to count occurrences within each group.
+    title : str
+        The title to print before each group of counts.
+
+    Returns:
+    -------
+    None
+    """
+
+    # Remove rows with NaN values in group_column or value_column
+    df = df.dropna(subset=[group_column, value_column])
+
+    unique_values = df[group_column].unique()
+
+    for value in unique_values:
+        counts = df[df[group_column] == value][value_column].value_counts(
+            normalize=True
+        )
+        percentages = (counts * 100).astype(int).astype(str) + "%"
+
+        # Create Markdown table
+        table_header = "| Category | Percentage |\n|-------|-------------|"
+        table_rows = "\n".join(
+            f"| {index} | {percent} |" for index, percent in percentages.items()
+        )
+
+        # Print the HTML styling and Markdown table
+        print(
+            f"""
+<center>
+    <a id="{label}_{get_random_id()}"></a>
+    <br/>
+    <br/>
+    <div style="text-align: center;">
+    {table_header}
+    {table_rows}
+    </div>
+    <br/>
+    <p style="text-align: center;"><em>{title} - {value}</em></p>
+    <br/>
+</center>
+"""
+        )
+        print("\n" * 3)
