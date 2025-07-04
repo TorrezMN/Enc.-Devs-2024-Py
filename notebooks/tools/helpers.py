@@ -87,7 +87,7 @@ def get_column_uniques_count(df, column_name):
 
 
 def plot_grouped_by_category_barh_charts(
-    grouped_df, column_name, title, ylabel, fontsize=10
+    grouped_df, column_name, title, ylabel, fontsize=10, color="blue"
 ):
     """
     Plots multiple horizontal bar charts based on a set of 'groups'.
@@ -134,7 +134,9 @@ def plot_grouped_by_category_barh_charts(
         plt.show()
 
 
-def barh_chart_unique_values(df, group_column, value_column, title, ylabel):
+def barh_chart_unique_values(
+    df, group_column, value_column, title, ylabel, color="blue"
+):
     """
     Plots horizontal bar charts for each unique value in group_column.
 
@@ -176,7 +178,7 @@ def barh_chart_unique_values(df, group_column, value_column, title, ylabel):
 
 
 def barh_chart_unique_values_grid(
-    df, group_column, value_column, title, ylabel, nrows, ncols
+    df, group_column, value_column, title, ylabel, nrows, ncols, color="blue"
 ):
     """
     Plots a grid of horizontal bar charts for each unique value in group_column.
@@ -799,7 +801,7 @@ def md_group_table(label, df, group_column, value_column, title):
     {table_rows}
     </div>
     <br/>
-    <p style="text-align: center;"><em>{title} - {value}</em></p>
+    <p style="text-align: center;"><em>{title} \n <p class="table_subtitle">({value})<p></em></p>
     <br/>
 </center>
 """

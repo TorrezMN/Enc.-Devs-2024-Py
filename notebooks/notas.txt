@@ -66,3 +66,8 @@ Based on the questions in the survey, here are some interesting topics and aspec
 # Impact of Lay-offs
 	Analyze the impact of lay-offs on employment status and job roles.
 	Study the time taken to find new employment and compare new job roles and salaries with previous ones.
+
+
+
+# PHP 
+  Es una mierda?
